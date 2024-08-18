@@ -7,6 +7,7 @@ import {playerNameRenderingManager} from "../../renderer/manager/PlayerNameRende
 class PlayerManager {
 	private players: Player[];
 	private bots: BotPlayer[];
+	private incomeLoopLength: number = 500;
 
 	/**
 	 * Initializes the player manager with the given players.
@@ -55,8 +56,17 @@ class PlayerManager {
 	//TODO: bot ticking should be done in a separate bot manager
 	tick(): void {
 		this.bots.forEach(bot => bot.tick());
-		if (gameTicker.getTickCount() % 10 === 0) {
-			this.players.forEach(player => player.income());
+		let microTick: number = gameTicker.getTickCount();
+		if (microTick % 10 === 0) {
+			let macroTick: number = (microTick % this.incomeLoopLength);
+			let largestTerritory: number = this.players[0].getTerritorySize();
+			for (let i = 1; i < this.players.length; i++) {
+				if (this.players[i].getTerritorySize() > largestTerritory) {
+					largestTerritory = this.players[i].getTerritorySize();
+				}
+			}
+			let territoryMultiplier: number = macroTick / (this.incomeLoopLength * largestTerritory * 10);
+			this.players.forEach(player => player.income(territoryMultiplier));
 		}
 	}
 }
