@@ -74,7 +74,7 @@ export class Player {
 	 * Process one tick worth of income.
 	 */
 	income(territoryMultiplier: number) {
-		this.addTroops(Math.max(1, Math.floor((this.territorySize * this.territorySize * territoryMultiplier) + Math.floor(this.troops / 30))));
+		this.addTroops(Math.max(1, Math.floor((this.territorySize * territoryMultiplier) + Math.floor(this.troops / 30))));
 	}
 
 	/**
