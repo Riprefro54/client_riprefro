@@ -10,7 +10,7 @@ export class Player {
 	readonly id: number;
 	readonly name: string;
 	readonly baseColor: HSLColor;
-	private troops: number = 1000;
+	private troops: number = 500;
 	readonly borderTiles: Set<number> = new Set();
 	private territorySize: number = 0;
 	private alive: boolean = true;
@@ -73,8 +73,8 @@ export class Player {
 	/**
 	 * Process one tick worth of income.
 	 */
-	income(territoryMultiplier: number) {
-		this.addTroops(Math.max(1, Math.floor((this.territorySize * territoryMultiplier) + Math.floor(this.troops / 30))));
+	income(territoryMultiplier: number, troopMultiplier: number) {
+		this.addTroops(Math.max(1, Math.floor((this.territorySize * territoryMultiplier) + Math.floor(this.troops * troopMultiplier))));
 	}
 
 	/**

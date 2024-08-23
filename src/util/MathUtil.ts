@@ -37,3 +37,11 @@ export function bordersTile(tile: number, player: number): boolean {
 		(y > 0 && territoryManager.isOwner(tile - gameMap.width, player)) ||
 		(y < gameMap.height - 1 && territoryManager.isOwner(tile + gameMap.width, player));
 }
+
+export function sumOfSquaresUpTo(n: number): number {
+    let total = 0;
+    for (let i = 1; i <= n; i++) {
+        total += i ** 2;
+    }
+    return total;
+}

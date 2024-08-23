@@ -2,12 +2,14 @@ import {Player} from "./Player";
 import {BotPlayer} from "./BotPlayer";
 import {spawnManager} from "./SpawnManager";
 import {gameTicker} from "../GameTicker";
+import {sumOfSquaresUpTo} from "../../util/MathUtil";
 import {playerNameRenderingManager} from "../../renderer/manager/PlayerNameRenderingManager";
 
 class PlayerManager {
 	private players: Player[];
 	private bots: BotPlayer[];
-	private incomeLoopLength: number = 250;
+	private incomeLoopLength: number = 10000; // in miliseconds
+	private sumOfSquares: number = sumOfSquaresUpTo(this.incomeLoopLength / 500);
 
 	/**
 	 * Initializes the player manager with the given players.
@@ -58,8 +60,9 @@ class PlayerManager {
 		this.bots.forEach(bot => bot.tick());
 		let gameTick: number = gameTicker.getTickCount();
 		if (gameTick % 10 === 0) {
-			let territoryMultiplier: number = (gameTick % this.incomeLoopLength) / (this.incomeLoopLength * 20);
-			this.players.forEach(player => player.income(territoryMultiplier));
+			let territoryMultiplier: number = ((gameTick/10) % (this.incomeLoopLength / 500))**2 / this.sumOfSquares;
+			let troopMultiplier: number = (1 + (1 * Math.exp(-gameTick/this.incomeLoopLength))) / 40;
+			this.players.forEach(player => player.income(territoryMultiplier, troopMultiplier));
 		}
 	}
 }
